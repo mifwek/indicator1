@@ -22,7 +22,7 @@ bot.on("message", function(message) {
     var args = message.content.substring(PREFIX.length).split(" ");
     var command = args[0].toLowerCase();
 
-    if (cmd === `${prefix}help`) {
+    if (command == "help") {
         var embedhelpmember = new Discord.RichEmbed()
             .setTitle("__**📁COMMAND LIST**__")
             .addField(" - serverinfo", "`m=serverinfo`")
@@ -38,7 +38,7 @@ bot.on("message", function(message) {
             message.channel.send(embedhelpmember)
     };
 
-	if (cmd === `${prefix}botinfo`) {
+	if (command == "botinfo") {
 		let bicon = bot.user.displayAvatarURL;
 		let botembed = new Discord.RichEmbed()
 		.setTitle("Informasi Bot")
@@ -49,7 +49,7 @@ bot.on("message", function(message) {
 		message.channel.send(botembed);
 	}
 
-    if (cmd === `${prefix}kuis`) {
+    if (command == "kuis") {
        const quiz = [
            { q: "Pak RT bisa terbang, Pak RT punya?", a: ["tiket"] }, 
            { q: "Mobil Tidak Bisa Jalan Maju, Sebab?", a: ["parkir"] },
@@ -91,7 +91,7 @@ bot.on("message", function(message) {
       message.delete().catch();
     }
 
-	if (cmd === `${prefix}serverinfo`) {
+	if (command == "serverinfo") {
 		let sicon = message.guild.iconURL;
 		let serverembed = new Discord.RichEmbed()
 		.setTitle("Informasi Server")
@@ -107,13 +107,13 @@ bot.on("message", function(message) {
 		message.channel.send(serverembed);
 	}
 
-	if (cmd === `${prefix}say`) {
+	if (command == "say") {
 		let say = args.join(" ");
     if(!say) return message.reply("masukan sebuah kata atau kalimat");
           message.delete().catch(O_o=>{}); 
           message.channel.send(say);
     }
-    if (cmd === `${prefix}unik`) {
+    if (command == "unik") {
     		if (!args.join(' ')) return message.channel.send('harap berikan teks');
     		figlet(args.join(' '), (err, data) => {
     			message.channel.send(data, {
@@ -122,7 +122,7 @@ bot.on("message", function(message) {
     		});
     	};
     	
-    if (cmd === `${prefix}avatar`) {
+    if (command == "avatar") {
     	let user = message.mentions.users.first() || message.author;
         let embed = new Discord.RichEmbed()
         .setAuthor(`${user.username}'s Avatar`)
@@ -132,7 +132,7 @@ bot.on("message", function(message) {
         
     };
 
-    if (cmd === `${prefix}userinfo`) {
+    if (command == "userinfo") {
     	let user = message.mentions.users.first() || message.author;
         let embed = new Discord.RichEmbed()
         .setAuthor(`${user.tag}'s Info`, user.displayAvatarURL)
@@ -147,14 +147,14 @@ bot.on("message", function(message) {
         message.channel.send(embed)
     };
 
-    if (cmd === `${prefix}hapus`) {
+    if (command == "hapus") {
     	if(isNaN(args[0])) return message.channel.send('Harap berikan jumlah yang valid untuk membersihkan atau menghapus pesan!');
         if (args[0] > 100) return message.channel.send('Berikan jumlah kurang dari 100!');
         message.channel.bulkDelete(args[0])
 
     };
 
-    if (cmd === `${prefix}judi`) {
+    if (command == "judi") {
        const slots = ['🍇', '🍊', '🍐'];
 		const slotOne = slots[Math.floor(Math.random() * slots.length)];
 		const slotTwo = slots[Math.floor(Math.random() * slots.length)];
@@ -175,7 +175,7 @@ bot.on("message", function(message) {
 		    `);
 	    }
 
-    if (cmd === `${prefix}ping`) {
+    if (command == "ping") {
         let start = Date.now(); message.channel.send(':ping_pong:').then(message => { 
         message.delete();
         let diff = (Date.now() - start); 
