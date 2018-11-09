@@ -1,1 +1,1 @@
-worker:node awkarin.js
+worker: node awkarin.js
