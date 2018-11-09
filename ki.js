@@ -1,11 +1,11 @@
 const Discord = require("discord.js");
 const bot = new Discord.Client({enableEveryone: true}, {enableTextChannel: true});
-const PREFIX = "m=";
+const config = require("./config.json");
 const figlet = require("figlet");
 
-bot.on("ready", function() {
-    bot.user.setGame(`Discord!`);
-    console.log(`${bot.user.username} is Ready!`);
+bot.on("ready", async () => {
+	console.log(`${bot.user.username} sudah online!`);
+	bot.user.setActivity("Active!", {type: "LISTENING"});
 });
 
 bot.on('guildMemberAdd', async (member) => {
@@ -14,15 +14,20 @@ bot.on('guildMemberAdd', async (member) => {
 
 });
 
-bot.on("message", function(message) {
-    if (message.author.bot) return;
-    if (!message.guild) return;
-    if (!message.content.startsWith(PREFIX)) return;
-    
-    var args = message.content.substring(PREFIX.length).split(" ");
-    var command = args[0].toLowerCase();
+bot.on("message", async message => {
+	if (message.author.bot) return;
+	if (message.channel.type === 'dm') return
 
-    if (command == "help") {
+	let prefix = config.prefix;
+	let messageArray = message.content.split(" ");
+	let cmd = messageArray[0];
+	let args = messageArray.slice(1);
+
+	if (cmd === `${prefix}halo`) {
+		message.channel.send("halo juga");
+	}
+
+    if (cmd === `${prefix}help`) {
         var embedhelpmember = new Discord.RichEmbed()
             .setTitle("__**📁COMMAND LIST**__")
             .addField(" - serverinfo", "`m=serverinfo`")
@@ -32,13 +37,12 @@ bot.on("message", function(message) {
             .addField(" - unik", "`m=unik halo`")
             .addField(" - judi", "`m=judi`")
             .addField(" - ping", "`m=ping`")
-            .addField(" - kuis", "`m=kuis`")
             .setColor(0x00FFEE)
             .setFooter("Ⓒ 2018 Indicator_Squad Bot.");
             message.channel.send(embedhelpmember)
     };
 
-	if (command == "botinfo") {
+	if (cmd === `${prefix}botinfo`) {
 		let bicon = bot.user.displayAvatarURL;
 		let botembed = new Discord.RichEmbed()
 		.setTitle("Informasi Bot")
@@ -49,7 +53,7 @@ bot.on("message", function(message) {
 		message.channel.send(botembed);
 	}
 
-    if (command == "kuis") {
+    if (cmd === `${prefix}kuis`) {
        const quiz = [
            { q: "Pak RT bisa terbang, Pak RT punya?", a: ["tiket"] }, 
            { q: "Mobil Tidak Bisa Jalan Maju, Sebab?", a: ["parkir"] },
@@ -91,7 +95,7 @@ bot.on("message", function(message) {
       message.delete().catch();
     }
 
-	if (command == "serverinfo") {
+	if (cmd === `${prefix}serverinfo`) {
 		let sicon = message.guild.iconURL;
 		let serverembed = new Discord.RichEmbed()
 		.setTitle("Informasi Server")
@@ -107,13 +111,13 @@ bot.on("message", function(message) {
 		message.channel.send(serverembed);
 	}
 
-	if (command == "say") {
+	if (cmd === `${prefix}say`) {
 		let say = args.join(" ");
     if(!say) return message.reply("masukan sebuah kata atau kalimat");
           message.delete().catch(O_o=>{}); 
           message.channel.send(say);
     }
-    if (command == "unik") {
+    if (cmd === `${prefix}unik`) {
     		if (!args.join(' ')) return message.channel.send('harap berikan teks');
     		figlet(args.join(' '), (err, data) => {
     			message.channel.send(data, {
@@ -122,7 +126,7 @@ bot.on("message", function(message) {
     		});
     	};
     	
-    if (command == "avatar") {
+    if (cmd === `${prefix}avatar`) {
     	let user = message.mentions.users.first() || message.author;
         let embed = new Discord.RichEmbed()
         .setAuthor(`${user.username}'s Avatar`)
@@ -132,7 +136,7 @@ bot.on("message", function(message) {
         
     };
 
-    if (command == "userinfo") {
+    if (cmd === `${prefix}userinfo`) {
     	let user = message.mentions.users.first() || message.author;
         let embed = new Discord.RichEmbed()
         .setAuthor(`${user.tag}'s Info`, user.displayAvatarURL)
@@ -147,14 +151,14 @@ bot.on("message", function(message) {
         message.channel.send(embed)
     };
 
-    if (command == "hapus") {
+    if (cmd === `${prefix}hapus`) {
     	if(isNaN(args[0])) return message.channel.send('Harap berikan jumlah yang valid untuk membersihkan atau menghapus pesan!');
         if (args[0] > 100) return message.channel.send('Berikan jumlah kurang dari 100!');
         message.channel.bulkDelete(args[0])
 
     };
 
-    if (command == "judi") {
+    if (cmd === `${prefix}judi`) {
        const slots = ['🍇', '🍊', '🍐'];
 		const slotOne = slots[Math.floor(Math.random() * slots.length)];
 		const slotTwo = slots[Math.floor(Math.random() * slots.length)];
@@ -175,7 +179,7 @@ bot.on("message", function(message) {
 		    `);
 	    }
 
-    if (command == "ping") {
+    if (cmd === `${prefix}ping`) {
         let start = Date.now(); message.channel.send(':ping_pong:').then(message => { 
         message.delete();
         let diff = (Date.now() - start); 
@@ -192,5 +196,5 @@ bot.on("message", function(message) {
 
 });
 
-bot.login(process.env.BOT_TOKEN);
-    
+bot.login(process.env.config.BOT_TOKEN);
+   
