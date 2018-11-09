@@ -196,5 +196,5 @@ bot.on("message", async message => {
 
 });
 
-bot.login(process.env.config.BOT_TOKEN);
+bot.login(process.env.config.TOKEN);
    
